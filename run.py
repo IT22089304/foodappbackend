@@ -21,8 +21,14 @@ app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 mongo = PyMongo(app)
 db = mongo.db
 
-# Utils
+# Test DB Connection
+try:
+    db.command("ping")
+    print("✅ MongoDB connected successfully!")
+except Exception as e:
+    print("❌ MongoDB connection failed:", str(e))
 
+# Utils
 def token_required(f):
     def decorated(*args, **kwargs):
         token = request.headers.get('Authorization')
@@ -113,4 +119,3 @@ def confirm_donation(current_user, donation_id):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
